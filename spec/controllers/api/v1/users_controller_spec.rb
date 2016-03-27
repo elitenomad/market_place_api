@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 describe Api::V1::UsersController do
-  before(:each) { request.headers['Accept'] = "application/vnd.marketplace.v1" }
-
   describe "GET #show" do
     before(:each) do
       @user = FactoryGirl.create :user
@@ -10,7 +8,7 @@ describe Api::V1::UsersController do
     end
 
     it "returns the information about a reporter on a hash" do
-      user_response = JSON.parse(response.body, symbolize_names: true)
+      user_response = json_response
       expect(user_response[:email]).to eql @user.email
     end
 
@@ -26,7 +24,7 @@ describe Api::V1::UsersController do
       end
 
       it 'renders the json response just created for the user ' do
-        user_response = JSON.parse(response.body, symbolize_names: true)
+        user_response = json_response
         expect(user_response[:email]).to eq @user_attributes[:email]
       end
 
@@ -43,7 +41,7 @@ describe Api::V1::UsersController do
       end
 
       it "renders the json representation for the updated user" do
-        user_response = JSON.parse(response.body, symbolize_names: true)
+        user_response = json_response
         expect(user_response[:email]).to eql "xyz@simple.com"
       end
 
@@ -58,12 +56,12 @@ describe Api::V1::UsersController do
       end
 
       it "renders an errors json" do
-        user_response = JSON.parse(response.body, symbolize_names: true)
+        user_response = json_response
         expect(user_response).to have_key(:errors)
       end
 
       it "renders the json errors on whye the user could not be created" do
-        user_response = JSON.parse(response.body, symbolize_names: true)
+        user_response = json_response
         expect(user_response[:errors][:email]).to include "is invalid"
       end
 
