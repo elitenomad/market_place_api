@@ -30,4 +30,19 @@ RSpec.describe User, type: :model do
       expect(@user.auth_token).not_to eql existing_user.auth_token
     end
   end
+
+  describe "Product association" do
+    before :each do
+      @user = FactoryGirl.create :user
+      3.times { FactoryGirl.create :product, user: @user}
+    end
+
+    it 'is expected to destroy dependent products' do
+      products = @user.products
+      @user.destroy
+      products.each do |product|
+        expect(Product.find(product)).to raise_error  ActiveRecord::RecordNotFound
+      end
+    end
+  end
 end

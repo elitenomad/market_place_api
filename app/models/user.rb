@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   validates :email, presence: true, uniqueness: true
   validates :auth_token, uniqueness: true
   before_save :generate_authentication_token!
-  has_many :products
+  has_many :products, dependent: :destroy
 
   def generate_authentication_token!
     begin
